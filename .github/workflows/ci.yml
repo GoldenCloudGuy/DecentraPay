@@ -1,0 +1,19 @@
+name: Infura API Key Workflow
+
+on: 
+  push:           # Trigger on push to any branch
+    branches:
+      - main
+
+jobs:
+  example-job:
+    runs-on: ubuntu-latest  # The OS for running the job
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Clones your repository into the runner
+
+      - name: Use Secret
+        run: |
+          echo "Running with the API key"
+          curl -X GET "https://infura.io/api/endpoint?key=${{ secrets.INFURA_API_KEY }}"
