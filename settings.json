@@ -3,6 +3,7 @@
     "cryptoPriceCheckerInterval": "720",
     "orderStatusCheckerInterval": "720",
     "supportedCryptos" : ["ETH", "BTC", "XMR", "USDT", "BNB", "XRP", "SOL"],
+    "supportedCurrencies": ["USD", "EUR", "JPY", "GBP", "CNY"],
     "nameCryptoPriceDatabase": "CryptoPrices",
     "nameOrderDatabase": "Orders"
 }

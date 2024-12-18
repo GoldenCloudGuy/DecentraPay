@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Wallet Generator and Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: left;
+            display: inline-block;
+            width: 80%;
+            word-break: break-all;
+        }
+        .error {
+            color: red;
+        }
+        .search-bar {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .search-bar input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crypto Wallet Generator and Checker</h1>
+    <p>Click a button below to generate a wallet for the selected cryptocurrency:</p>
+
+    <!-- Buttons for Wallet Types -->
+    <button onclick="generateWallet('ethereum')">Generate Ethereum Wallet</button>
+    <button onclick="generateWallet('bitcoin')">Generate Bitcoin Wallet</button>
+    <button onclick="generateWallet('solana')">Generate Solana Wallet</button>
+    <button onclick="generateWallet('xrp')">Generate XRP Wallet</button>
+    <button onclick="generateWallet('monero')">Generate Monero Wallet</button>
+    <button onclick="generateWallet('bnb')">Generate Binance Wallet</button>
+    <button onclick="generateWallet('usdt')">Generate USDT (ERC20) Wallet</button>
+
+    <!-- Wallet Check Section -->
+    <div class="search-bar">
+        <input type="text" id="wallet-address" placeholder="Enter Wallet Address">
+        <button onclick="checkWallet()">Check Wallet</button>
+    </div>
+
+    <!-- Output Section -->
+    <div id="output">
+        <h3>Wallet Details</h3>
+        <p id="wallet-details">Click a button to generate a wallet...</p>
+    </div>
+
+    <script>
+        // Function to Fetch Wallet Details
+        async function generateWallet(type) {
+            const outputElement = document.getElementById('wallet-details');
+            outputElement.innerHTML = "Generating wallet...";
+
+            try {
+                const response = await fetch(`http://localhost:3001/generate-wallet/${type}`);
+                if (!response.ok) {
+                    throw new Error(`Failed to generate ${type} wallet`);
+                }
+
+                const data = await response.json();
+                const wallet = data.wallet;
+
+                // Format and Display Wallet Information
+                const currentTime = new Date().toLocaleString();
+                outputElement.innerHTML = `
+                    <strong>Currency:</strong> ${wallet.currency} <br>
+                    <strong>Address:</strong> ${wallet.address} <br>
+                    <strong>Private Key:</strong> ${wallet.privateKey} <br>
+                    <strong>Created Time:</strong> ${currentTime} <br>
+                    ${wallet.mnemonic ? `<strong>Mnemonic:</strong> ${wallet.mnemonic}` : ''}
+                `;
+            } catch (error) {
+                console.error(error);
+                outputElement.innerHTML = `<span class="error">${error.message}</span>`;
+            }
+        }
+
+        // Function to Check Wallet Details
+        async function checkWallet() {
+            const walletAddress = document.getElementById('wallet-address').value;
+            const outputElement = document.getElementById('wallet-details');
+            outputElement.innerHTML = "Checking wallet...";
+
+            if (!walletAddress) {
+                outputElement.innerHTML = `<span class="error">Please enter a wallet address.</span>`;
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/check-wallet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ walletAddress }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to check wallet');
+                }
+
+                const walletData = await response.json();
+
+                // Display Wallet Information
+                outputElement.innerHTML = `
+                    <strong>Wallet Address:</strong> ${walletData.address} <br>
+                    <strong>ETH Balance:</strong> ${walletData.balance.ETH.amount} ETH
+                `;
+            } catch (error) {
+                console.error(error);
+                outputElement.innerHTML = `<span class="error">${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>

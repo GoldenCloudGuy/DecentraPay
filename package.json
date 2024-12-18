@@ -1,0 +1,41 @@
+{
+  "name": "decentrapay",
+  "version": "1.0.0",
+  "description": "DecentraPay - Open Source Crypto Payment System using MongoDB for self-hosted crypto transactions.",
+  "main": "index.js",
+  "scripts": {
+    "start:pricegetter": "node Backend/PriceGetter/pricegetter.js",
+    "start:walletgen": "node Backend/WalletGeneration/walletGenerator.js",
+    "start:smtp": "node SMTP/smtp.js",
+    "start:database": "python Backend/MongoDB/createDatabase.py",
+    "start:all": "concurrently \"npm run start:pricegetter\" \"npm run start:walletgen\" \"npm run start:smtp\"",
+    "start:server": "python startPaymentServer.py"
+  },
+  "keywords": [
+    "crypto",
+    "payment",
+    "mongodb",
+    "web3",
+    "self-hosted"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0",
+    "axios": "^1.7.9",
+    "bip32": "^5.0.0-rc.0",
+    "bip39": "^3.1.0",
+    "bitcoinjs-lib": "^6.1.7",
+    "concurrently": "^8.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ethers": "^6.13.4",
+    "express": "^4.21.2",
+    "monero-ts": "^0.11.1",
+    "mongodb": "^6.12.0",
+    "nodemailer": "^6.9.16",
+    "ripple-keypairs": "^2.0.0",
+    "tiny-secp256k1": "^2.2.3",
+    "web3": "^4.16.0"
+  }
+}
