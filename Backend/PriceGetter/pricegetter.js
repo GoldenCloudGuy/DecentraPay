@@ -18,7 +18,7 @@ app.use(cors());
 const cryptoSymbols = ["ETH", "BTC", "XMR", "USDT", "BNB", "XRP", "SOL"];
 
 // MongoDB setup
-const uri = 'mongodb://127.0.0.1:27017';
+const uri = process.env.MONGODB_CONNECTION;
 const dbName = 'DecentraPay';
 let db;
 let cryptoPricesCollection;

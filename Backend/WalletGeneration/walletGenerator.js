@@ -18,7 +18,7 @@ const GENERATE_WALLET_PORT = 3100;
 const NETWORK = bitcoin.networks.bitcoin; // Mainnet network
 
 // MongoDB Setup
-const uri = 'mongodb://127.0.0.1:27017'; // Local MongoDB
+const uri = process.env.MONGODB_CONNECTION; // Local MongoDB
 const dbName = 'DecentraPay'; // Database name
 let db;
 let walletsCollection;

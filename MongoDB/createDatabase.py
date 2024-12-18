@@ -1,7 +1,14 @@
 from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
 
-# MongoDB connection setup using IPv4 address
-uri = "mongodb://127.0.0.1:27017"  # Connection string
+load_dotenv()
+
+uri = os.getenv('MONGODB_CONNECTION')  # Fetch connection string from environment variables
+
+if not uri:
+    raise ValueError("MONGODB_CONNECTION is not set in the .env file or environment variables")
+
 client = MongoClient(uri)
 
 # Database and Collections creation
